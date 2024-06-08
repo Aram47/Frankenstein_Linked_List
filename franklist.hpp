@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include "franklist.h"
 
 // Node default constructors and destructor
@@ -23,14 +24,7 @@ Frankenstein::FrankList<T>::Node::Node(T val)
 template <typename T>
 Frankenstein::FrankList<T>::Node::~Node()
 {
-    if (this -> next)
-        delete this -> next;
-    if (this -> prev)
-        delete this -> prev;
-    if (this -> asc)
-        delete this -> asc;
-    if (this -> desc)
-        delete this -> desc; 
+
 }
 
 // base iterator implementation
@@ -77,14 +71,14 @@ Frankenstein::FrankList<T>::const_iterator::const_iterator(base_iterator&& rhv) 
 
         
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -92,26 +86,26 @@ const Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::co
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator++() //O(1)
 {
     this -> ptr = this -> ptr -> next;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::const_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::const_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_iterator tmp(*this);
     ++(*this);
@@ -119,14 +113,14 @@ const Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::con
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator& Frankenstein::FrankList<T>::const_iterator::operator--() //O(1)
 {
     this -> ptr = this -> ptr -> prev;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::const_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::const_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_iterator tmp(*this);
     --(*this);
@@ -135,8 +129,9 @@ const Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::con
 
 template <typename T>
 Frankenstein::FrankList<T>::const_iterator::const_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr);
+    
 }
 
 // iterator implementation
@@ -155,26 +150,26 @@ Frankenstein::FrankList<T>::iterator::iterator(base_iterator&& rhv) //O(1)
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::iterator& Frankenstein::FrankList<T>::iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::iterator& Frankenstein::FrankList<T>::iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::iterator& Frankenstein::FrankList<T>::iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::iterator& Frankenstein::FrankList<T>::iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -183,8 +178,9 @@ const Frankenstein::FrankList<T>::iterator& Frankenstein::FrankList<T>::iterator
 
 template <typename T>
 Frankenstein::FrankList<T>::iterator::iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_iterator::const_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_iterator::const_iterator(ptr);
+    
 }
 
 // const_reverse_iterator implementation
@@ -203,14 +199,14 @@ Frankenstein::FrankList<T>::const_reverse_iterator::const_reverse_iterator(base_
 }
 
 template <typename T>    
-const Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -218,26 +214,26 @@ const Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankLis
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_reverse_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_reverse_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_reverse_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_reverse_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator++() //O(1)
 {
     this -> ptr = this -> ptr -> prev;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::const_reverse_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::const_reverse_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_reverse_iterator tmp(*this);
     ++(*this);
@@ -245,14 +241,14 @@ const Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator& Frankenstein::FrankList<T>::const_reverse_iterator::operator--() //O(1)
 {
     this -> ptr = this -> ptr -> next;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::const_reverse_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::const_reverse_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_reverse_iterator tmp(*this);
     --(*this);
@@ -261,8 +257,9 @@ const Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList
 
 template <typename T>
 Frankenstein::FrankList<T>::const_reverse_iterator::const_reverse_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
+    
 }
 
 // reverse_iterator implementation
@@ -281,26 +278,26 @@ Frankenstein::FrankList<T>::reverse_iterator::reverse_iterator(base_iterator&& r
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::reverse_iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::reverse_iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::reverse_iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::reverse_iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::reverse_iterator& Frankenstein::FrankList<T>::reverse_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::reverse_iterator& Frankenstein::FrankList<T>::reverse_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::reverse_iterator& Frankenstein::FrankList<T>::reverse_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::reverse_iterator& Frankenstein::FrankList<T>::reverse_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -309,34 +306,36 @@ const Frankenstein::FrankList<T>::reverse_iterator& Frankenstein::FrankList<T>::
 
 template <typename T>
 Frankenstein::FrankList<T>::reverse_iterator::reverse_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_reverse_iterator::const_reverse_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_reverse_iterator::const_reverse_iterator(ptr);
+    
 }
 
 // const_asc_iterator implementation
 
 template <typename T>
 Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(const base_iterator& rhv) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
+    
 }
 
 template <typename T>
 Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -344,26 +343,26 @@ const Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_asc_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_asc_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_asc_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_asc_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator++() //O(1)
 {
     this -> ptr = this -> ptr -> asc;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::const_asc_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::const_asc_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_asc_iterator tmp(*this);
     ++(*this);
@@ -371,14 +370,14 @@ const Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>:
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator& Frankenstein::FrankList<T>::const_asc_iterator::operator--() //O(1)
 {
     this -> ptr = this -> ptr -> desc;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::const_asc_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::const_asc_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_asc_iterator tmp(*this);
     --(*this);
@@ -387,39 +386,41 @@ const Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>:
 
 template <typename T>
 Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr);
+    
 }
 
 // asc_iterator implementation
 
 template <typename T>
 Frankenstein::FrankList<T>::asc_iterator::asc_iterator(const base_iterator& rhv) //O(1)
+    : Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(rhv.ptr);
+    
 }
 
 template <typename T>
 Frankenstein::FrankList<T>::asc_iterator::asc_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::asc_iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::asc_iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::asc_iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::asc_iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this->ptr = rhv.ptr;
     return *this;
@@ -427,7 +428,7 @@ const Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_
 
 
 template <typename T>
-const Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this->ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -436,8 +437,9 @@ const Frankenstein::FrankList<T>::asc_iterator& Frankenstein::FrankList<T>::asc_
 
 template <typename T>
 Frankenstein::FrankList<T>::asc_iterator::asc_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_asc_iterator::const_asc_iterator(ptr);
+    
 }
 
 // const_desc_iterator implementation
@@ -456,14 +458,14 @@ Frankenstein::FrankList<T>::const_desc_iterator::const_desc_iterator(base_iterat
 }
 
 template <typename T>    
-const Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -471,26 +473,26 @@ const Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_desc_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_desc_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_desc_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_desc_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator++() //O(1)
 {
     this -> ptr = this -> ptr -> desc;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::const_desc_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::const_desc_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_desc_iterator tmp(*this);
     ++(*this);
@@ -498,14 +500,14 @@ const Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator& Frankenstein::FrankList<T>::const_desc_iterator::operator--() //O(1)
 {
     this -> ptr = this -> ptr-> asc;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::const_desc_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::const_desc_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_desc_iterator tmp(*this);
     --(*this);
@@ -514,8 +516,9 @@ const Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>
 
 template <typename T>
 Frankenstein::FrankList<T>::const_desc_iterator::const_desc_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr);
+    
 }
 
 // desc_iterator implementation
@@ -534,26 +537,26 @@ Frankenstein::FrankList<T>::desc_iterator::desc_iterator(base_iterator&& rhv) //
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::desc_iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::desc_iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::desc_iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::desc_iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::desc_iterator& Frankenstein::FrankList<T>::desc_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::desc_iterator& Frankenstein::FrankList<T>::desc_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this->ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::desc_iterator& Frankenstein::FrankList<T>::desc_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::desc_iterator& Frankenstein::FrankList<T>::desc_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this->ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -562,8 +565,9 @@ const Frankenstein::FrankList<T>::desc_iterator& Frankenstein::FrankList<T>::des
 
 template <typename T>
 Frankenstein::FrankList<T>::desc_iterator::desc_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_desc_iterator::const_desc_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_desc_iterator::const_desc_iterator(ptr);
+    
 }
 
 // const_multi_iterator implementation
@@ -577,20 +581,20 @@ Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(const bas
 
 template <typename T>
 Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -598,19 +602,19 @@ const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_multi_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_multi_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_multi_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_multi_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator++() //O(1)
 {
     if (this -> mode) 
     {
@@ -624,7 +628,7 @@ const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::const_multi_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::const_multi_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_multi_iterator tmp(*this);
     ++(*this);
@@ -632,7 +636,7 @@ const Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<T>::const_multi_iterator::operator--() //O(1)
 {
     if (this -> mode) 
     {
@@ -646,7 +650,7 @@ const Frankenstein::FrankList<T>::const_multi_iterator& Frankenstein::FrankList<
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::const_multi_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::const_multi_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_multi_iterator tmp(*this);
     --(*this);
@@ -661,8 +665,9 @@ void Frankenstein::FrankList<T>::const_multi_iterator::chmod() //O(1)
 
 template <typename T>
 Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr);
+    
 }
 
 // multi_iterator implementation
@@ -670,38 +675,39 @@ Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(Node* ptr
 
 template <typename T>
 Frankenstein::FrankList<T>::multi_iterator::multi_iterator(const base_iterator& rhv) //O(1)
+    : Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(rhv.ptr);
+
 }
 
 template <typename T>
 Frankenstein::FrankList<T>::multi_iterator::multi_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::multi_iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::multi_iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::multi_iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::multi_iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::multi_iterator& Frankenstein::FrankList<T>::multi_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::multi_iterator& Frankenstein::FrankList<T>::multi_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::multi_iterator& Frankenstein::FrankList<T>::multi_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::multi_iterator& Frankenstein::FrankList<T>::multi_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -710,8 +716,9 @@ const Frankenstein::FrankList<T>::multi_iterator& Frankenstein::FrankList<T>::mu
 
 template <typename T>
 Frankenstein::FrankList<T>::multi_iterator::multi_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_multi_iterator::const_multi_iterator(ptr);
+    
 }
 
 // const_multi_reverse_iterator implementation
@@ -719,26 +726,27 @@ Frankenstein::FrankList<T>::multi_iterator::multi_iterator(Node* ptr) //O(1)
 
 template <typename T>
 Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(const base_iterator& rhv) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
+    
 }
 
 template <typename T>
 Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -746,19 +754,19 @@ const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::Fr
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator*() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator*() const //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator->() const //O(1)
+typename Frankenstein::FrankList<T>::const_pointer Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator->() const //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator++() //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator++() //O(1)
 {
     if (this -> mode) 
     {
@@ -772,7 +780,7 @@ const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::Fr
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator++(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator++(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_multi_reverse_iterator tmp(*this);
     ++(*this);
@@ -780,7 +788,7 @@ const Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::Fra
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator--() //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator--() //O(1)
 {
     if (this -> mode) 
     {
@@ -794,7 +802,7 @@ const Frankenstein::FrankList<T>::const_multi_reverse_iterator& Frankenstein::Fr
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator--(value_type) //O(1)
+const typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::const_multi_reverse_iterator::operator--(value_type) //O(1)
 {
     Frankenstein::FrankList<T>::const_multi_reverse_iterator tmp(*this);
     --(*this);
@@ -809,8 +817,9 @@ void Frankenstein::FrankList<T>::const_multi_reverse_iterator::chmod() //O(1)
 
 template <typename T>
 Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::base_iterator::base_iterator(ptr);
+    
 }
 
 // multi_reverse_iterator implementation
@@ -823,32 +832,32 @@ Frankenstein::FrankList<T>::multi_reverse_iterator::multi_reverse_iterator(const
 
 template <typename T>
 Frankenstein::FrankList<T>::multi_reverse_iterator::multi_reverse_iterator(base_iterator&& rhv) //O(1)
+    : Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(rhv.ptr)
 {
-    Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(rhv.ptr);
     rhv.ptr = nullptr;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::multi_reverse_iterator::operator*() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::multi_reverse_iterator::operator*() //O(1)
 {
     return this -> ptr -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::multi_reverse_iterator::operator->() //O(1)
+typename Frankenstein::FrankList<T>::pointer Frankenstein::FrankList<T>::multi_reverse_iterator::operator->() //O(1)
 {
     return this -> ptr;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::multi_reverse_iterator& Frankenstein::FrankList<T>::multi_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::multi_reverse_iterator& Frankenstein::FrankList<T>::multi_reverse_iterator::operator=(const base_iterator& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     return *this;
 }
 
 template <typename T>
-const Frankenstein::FrankList<T>::multi_reverse_iterator& Frankenstein::FrankList<T>::multi_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
+const typename Frankenstein::FrankList<T>::multi_reverse_iterator& Frankenstein::FrankList<T>::multi_reverse_iterator::operator=(base_iterator&& rhv) //O(1)
 {
     this -> ptr = rhv.ptr;
     rhv.ptr = nullptr;
@@ -857,8 +866,9 @@ const Frankenstein::FrankList<T>::multi_reverse_iterator& Frankenstein::FrankLis
 
 template <typename T>
 Frankenstein::FrankList<T>::multi_reverse_iterator::multi_reverse_iterator(Node* ptr) //O(1)
+    : Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(ptr)
 {
-    Frankenstein::FrankList<T>::const_multi_reverse_iterator::const_multi_reverse_iterator(ptr);
+    
 }
 
 // Constructors for Frankenstein
@@ -977,7 +987,7 @@ void Frankenstein::FrankList<value_type>::swap(FrankList<value_type>& rhv) //O(1
 
 
 template <typename T>
-Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::size() const //O(n)
+typename Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::size() const //O(n)
 {
     size_type size = 0;
     for (auto i = Frankenstein::FrankList<T>::cbegin(); i != Frankenstein::FrankList<T>::cend(); ++i)
@@ -993,7 +1003,7 @@ bool Frankenstein::FrankList<T>::empty() const //O(1)
 }
 
 template <typename T>
-void Frankenstein::FrankList<T>::resize(size_type s, const_reference init = value_type()) //O(n)
+void Frankenstein::FrankList<T>::resize(size_type s, const_reference init) //O(n)
 {
     size_type m_s = Frankenstein::FrankList<T>::size();
     if (s < m_s)
@@ -1007,12 +1017,13 @@ void Frankenstein::FrankList<T>::resize(size_type s, const_reference init = valu
 template <typename T>
 void Frankenstein::FrankList<T>::clear() noexcept //O(n)
 {
-    while (this -> head) 
+    while (this->head)   // 1, 2
     {
         Node* tmp = this -> head;
         this -> head = head -> next;
         delete tmp;
     }
+
     this -> head = nullptr;
     this -> tail = nullptr;
     this -> ahead = nullptr;
@@ -1097,56 +1108,56 @@ void Frankenstein::FrankList<T>::pop_back() //O(1)
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::front() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::front() const //O(1)
 {
     assert((this -> head) != nullptr);
     return head -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::front() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::front() //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> head -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::back() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::back() const //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> tail -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::back() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::back() //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> tail -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::min() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::min() const //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> ahead -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::min() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::min() //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> ahead -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::max() const //O(1)
+typename Frankenstein::FrankList<T>::const_reference Frankenstein::FrankList<T>::max() const //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> atail -> val;
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::max() //O(1)
+typename Frankenstein::FrankList<T>::reference Frankenstein::FrankList<T>::max() //O(1)
 {
     assert((this -> head) != nullptr);
     return this -> atail -> val;
@@ -1259,195 +1270,195 @@ bool Frankenstein::FrankList<T>::operator>=(const FrankList<value_type>& rhv) co
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::cbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::cbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_iterator(this -> head);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::cend() const //O(1)
+typename Frankenstein::FrankList<T>::const_iterator Frankenstein::FrankList<T>::cend() const //O(1)
 {
-    return Frankenstein::FrankList<T>::const_iterator(this -> tail -> next);
+    return Frankenstein::FrankList<T>::const_iterator(this->tail->next);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::crbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::crbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_reverse_iterator(this -> tail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::crend() const //O(1)
+typename Frankenstein::FrankList<T>::const_reverse_iterator Frankenstein::FrankList<T>::crend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_reverse_iterator(this -> head -> prev);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::cabegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::cabegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_asc_iterator(this -> ahead);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::caend() const //O(1)
+typename Frankenstein::FrankList<T>::const_asc_iterator Frankenstein::FrankList<T>::caend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_asc_iterator(this -> atail -> asc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::cdbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::cdbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_desc_iterator(this -> atail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::cdend() const //O(1)
+typename Frankenstein::FrankList<T>::const_desc_iterator Frankenstein::FrankList<T>::cdend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_desc_iterator(this -> ahead -> desc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_iterator(this -> head);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmend() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_iterator(this -> tail -> next);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmabegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmabegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_iterator(this -> ahead);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmaend() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_iterator Frankenstein::FrankList<T>::cmaend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_iterator(this -> atail -> asc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_reverse_iterator(this -> tail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrend() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_iterator(this -> head -> prev);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrdbegin() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrdbegin() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_reverse_iterator(this -> atail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrdend() const //O(1)
+typename Frankenstein::FrankList<T>::const_multi_reverse_iterator Frankenstein::FrankList<T>::cmrdend() const //O(1)
 {
     return Frankenstein::FrankList<T>::const_multi_reverse_iterator(this -> ahead -> desc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::begin() //O(1)
+typename Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::begin() //O(1)
 {
     return Frankenstein::FrankList<T>::iterator(this -> head);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::end() //O(1)
+typename Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::end() //O(1)
 {
     return Frankenstein::FrankList<T>::iterator(this -> tail -> next);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reverse_iterator Frankenstein::FrankList<T>::rbegin() //O(1)
+typename Frankenstein::FrankList<T>::reverse_iterator Frankenstein::FrankList<T>::rbegin() //O(1)
 {
     return Frankenstein::FrankList<T>::reverse_iterator(this -> tail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::reverse_iterator Frankenstein::FrankList<T>::rend() //O(1)
+typename Frankenstein::FrankList<T>::reverse_iterator Frankenstein::FrankList<T>::rend() //O(1)
 {
     return Frankenstein::FrankList<T>::reverse_iterator(this -> head -> prev);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::asc_iterator Frankenstein::FrankList<T>::abegin() //O(1)
+typename Frankenstein::FrankList<T>::asc_iterator Frankenstein::FrankList<T>::abegin() //O(1)
 {
     return Frankenstein::FrankList<T>::asc_iterator(this -> ahead);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::asc_iterator Frankenstein::FrankList<T>::aend() //O(1)
+typename Frankenstein::FrankList<T>::asc_iterator Frankenstein::FrankList<T>::aend() //O(1)
 {
     return Frankenstein::FrankList<T>::asc_iterator(this -> atail -> asc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::desc_iterator Frankenstein::FrankList<T>::dbegin() //O(1)
+typename Frankenstein::FrankList<T>::desc_iterator Frankenstein::FrankList<T>::dbegin() //O(1)
 {
     return Frankenstein::FrankList<T>::desc_iterator(this -> atail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::desc_iterator Frankenstein::FrankList<T>::dend() //O(1)
+typename Frankenstein::FrankList<T>::desc_iterator Frankenstein::FrankList<T>::dend() //O(1)
 {
     return Frankenstein::FrankList<T>::desc_iterator(this -> ahead -> desc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mbegin() //O(1)
+typename Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mbegin() //O(1)
 {
     return Frankenstein::FrankList<T>::multi_iterator(this -> head);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mend() //O(1)
+typename Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mend() //O(1)
 {
     return Frankenstein::FrankList<T>::iterator(this -> tail -> next);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mabegin() //O(1)
+typename Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::mabegin() //O(1)
 {
     return Frankenstein::FrankList<T>::multi_iterator(this -> ahead);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::maend() //O(1)
+typename Frankenstein::FrankList<T>::multi_iterator Frankenstein::FrankList<T>::maend() //O(1)
 {
     return Frankenstein::FrankList<T>::multi_iterator(this -> atail -> asc);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrbegin() //O(1)
+typename Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrbegin() //O(1)
 {
     return Frankenstein::FrankList<T>::multi_reverse_iterator(this -> tail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrend() //O(1)
+typename Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrend() //O(1)
 {
     return Frankenstein::FrankList<T>::iterator(this -> head -> prev);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrdbegin() //O(1)
+typename Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrdbegin() //O(1)
 {
     return Frankenstein::FrankList<T>::multi_reverse_iterator(this -> atail);
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrdend() //O(1)
+typename Frankenstein::FrankList<T>::multi_reverse_iterator Frankenstein::FrankList<T>::mrdend() //O(1)
 {
-    return Frankenstein::FrankList<T>::multi_reverse_iterator(this -> ahead -> des);
+    return Frankenstein::FrankList<T>::multi_reverse_iterator(this -> ahead -> desc);
 }
 
 template <typename T>
@@ -1455,7 +1466,7 @@ template <typename iter>
 iter Frankenstein::FrankList<T>::insert(iter pos, size_type size, const_reference val) //O(n)
 {
     static_assert(std::is_base_of<base_iterator, iter>::value == true, "uncorrect iterator");
-    for (size_type i = 0; i < s; ++i)
+    for (size_type i = 0; i < size; ++i)
         pos = Frankenstein::FrankList<T>::insert(pos, val);
     
     return pos;
@@ -1530,7 +1541,7 @@ iter Frankenstein::FrankList<T>::erase(iter f, iter l) //O(n)
 
 
 template <typename T>
-Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::remove(const_reference val) //O(n)
+typename Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::remove(const_reference val) //O(n)
 {
     size_type cnt = 0;
     iterator i = Frankenstein::FrankList<T>::begin();
@@ -1551,7 +1562,7 @@ Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::remove(const_r
 
 template <typename T>
 template <typename unary_predicate>
-Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::remove_if(unary_predicate func) //O(n)
+typename Frankenstein::FrankList<T>::size_type Frankenstein::FrankList<T>::remove_if(unary_predicate func) //O(n)
 {
     size_type cnt = 0;
     iterator i = Frankenstein::FrankList<T>::begin();
@@ -1583,7 +1594,7 @@ void Frankenstein::FrankList<T>::reverse() //O(n)
 }
 
 template <typename T>
-void Frankenstein::FrankList<T>::sort(bool reversed = false) //O(n)
+void Frankenstein::FrankList<T>::sort(bool reversed) //O(n)
 {
     if (!(this -> ahead))
         return;
@@ -1625,7 +1636,7 @@ void Frankenstein::FrankList<T>::sort(bool reversed = false) //O(n)
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::find(const_reference elem) //O(n)
+typename Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::find(const_reference elem) //O(n)
 {
     iterator i = Frankenstein::FrankList<T>::begin();
     while (i != Frankenstein::FrankList<T>::end() && *i != elem)
@@ -1637,20 +1648,20 @@ Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::find(const_refe
 }
 
 template <typename T>
-Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::rfind(const_reference elem) //O(n)
+typename Frankenstein::FrankList<T>::iterator Frankenstein::FrankList<T>::rfind(const_reference elem) //O(n)
 {
     reverse_iterator i = Frankenstein::FrankList<T>::rbegin();
     while (i != Frankenstein::FrankList<T>::rend() && *i != elem)
         ++i;
     
-    Frankenstein::FrankList<T>::organize_right(it.ptr);
+    Frankenstein::FrankList<T>::organize_right(i.ptr);
     return iterator(i);
 }
 
 
 template <typename T>
 template <typename unary_predicate>
-void Frankenstein::FrankList<T>::traverse(unary_predicate func, bool sorted = false, bool reversed = false) //O(n)
+void Frankenstein::FrankList<T>::traverse(unary_predicate func, bool sorted, bool reversed) //O(n)
 {
     if (!(this -> head))
         return;
@@ -1669,7 +1680,7 @@ void Frankenstein::FrankList<T>::traverse(unary_predicate func, bool sorted = fa
 }
 
 template <typename T>
-void Frankenstein::FrankList<T>::print(bool sorted = false, bool reversed = false) //O(n)
+void Frankenstein::FrankList<T>::print(bool sorted, bool reversed) //O(n)
 {
     if (!(this -> head)) 
     {
@@ -1733,7 +1744,7 @@ template <typename T>
 void Frankenstein::FrankList<T>::organize_left(Node* ptr) //O(1)
 {
     assert(ptr != nullptr);
-    if (ptr == (this - > head))
+    if (ptr == (this -> head))
         return;
     Node* prev = ptr -> prev;
     Node* next = ptr -> next;
